@@ -12,7 +12,7 @@ stress_level_labels = {
 }
 
 # Load your trained model and necessary data (Replace placeholders with actual model and data)
-model = joblib.load('StressDetection.pkl')  # Load your trained model
+model = joblib.load('StressDetection.sav')  # Load your trained model
 # Example: X = load_data()
 
 # Set the page title and icon
