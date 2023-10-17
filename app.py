@@ -1,15 +1,6 @@
 import streamlit as st
 import pandas as pd
-import joblib  # To load the saved model
-
-# Define the stress level labels
-stress_level_labels = {
-    0: "Low/Normal",
-    1: "Medium Low",
-    2: "Medium",
-    3: "Medium High",
-    4: "High"
-}
+import joblib
 
 # Load your trained model
 log_reg = joblib.load('stress_detection.sav')  # Replace 'stress_detection.sav' with the actual path to your saved model file
@@ -20,31 +11,14 @@ st.title("Stress Level Predictor")
 # Add input fields for the new data
 st.header("Enter New Data:")
 new_data = {}
-
-snoring_rate = st.text_input("snoring_rate", value="0.000")
-snoring_rate = float(snoring_rate)  # Convert to float
-
-respiration_rate = st.text_input("respiration_rate", value="0.000")
-respiration_rate = float(respiration_rate)  # Convert to float
-
-body_temperature = st.text_input("body_temperature", value="0.000")
-body_temperature = float(body_temperature)  # Convert to float
-
-limb_movemen = st.text_input("limb_movemen", value="0.000")
-limb_movemen = float(limb_movemen)  # Convert to float
-
-blood_oxygen  = st.text_input("blood_oxygen ", value="0.000")
-blood_oxygen  = float(blood_oxygen )  # Convert to float
-
-eye_movement = st.text_input("eye_movement", value="0.000")
-eye_movement = float(eye_movement)  # Convert to float
-
-sleeping_hours = st.text_input("sleeping_hours", value="0.000")
-sleeping_hours = float(sleeping_hours)  # Convert to float
-
-heart_rate  = st.text_input("heart_rate ", value="0.000")
-heart_rate  = float(heart_rate )  # Convert to float
-
+new_data["snoring_rate"] = st.number_input("snoring_rate", min_value=0.0, value=50.0, format="%.4f")
+new_data["respiration_rate"] = st.number_input("respiration_rate", min_value=0.0, value=18.0, format="%.4f")
+new_data["body_temperature"] = st.number_input("body_temperature", min_value=0.0, value=99.0, format="%.4f")
+new_data["limb_movement"] = st.number_input("limb_movement", min_value=0.0, value=8.0, format="%.4f")
+new_data["blood_oxygen"] = st.number_input("blood_oxygen", min_value=0.0, value=97.0, format="%.4f")
+new_data["eye_movement"] = st.number_input("eye_movement", min_value=0.0, value=80.0, format="%.4f")
+new_data["sleeping_hours"] = st.number_input("sleeping_hours", min_value=0.0, value=9.0, format="%.4f")
+new_data["heart_rate"] = st.number_input("heart_rate", min_value=0.0, value=55.0, format="%.4f")
 
 # Predict the stress level when a button is clicked
 if st.button("Predict Stress Level"):
@@ -53,8 +27,20 @@ if st.button("Predict Stress Level"):
     # Make the prediction using the loaded model
     predicted_stress_level = log_reg.predict(new_data_df)
     
-    # Get the human-readable label
-    predicted_stress_label = stress_level_labels[predicted_stress_level[0]]
+    # Map integer stress levels to human-readable labels and associated colors
+    stress_levels = {
+        0: ("Low/Normal", "green"),
+        1: ("Medium Low", "yellow"),
+        2: ("Medium", "orange"),
+        3: ("Medium High", "red"),
+        4: ("High", "darkred")
+    }
     
-    # Display the result
-    st.write(f"Predicted Stress Label: {predicted_stress_level[0]} ({predicted_stress_label})")
+    # Get the human-readable label and color
+    predicted_stress_label, label_color = stress_levels[predicted_stress_level[0]]
+    
+    # Style the message with different colors
+    colored_text = f'<span style="color: {label_color}; font-size: 20px;">{predicted_stress_label}</span>'
+    
+    # Display the predicted stress level with styling
+    st.markdown(colored_text, unsafe_allow_html=True)
