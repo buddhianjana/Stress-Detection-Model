@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import joblib
+import joblib  # To load the saved model
 
 # Define the stress level labels
 stress_level_labels = {
@@ -11,87 +11,33 @@ stress_level_labels = {
     4: "High"
 }
 
-# Load your trained model and necessary data (Replace placeholders with actual model and data)
-model = joblib.load('StressDetection.sav')  # Load your trained model
-# Example: X = load_data()
+# Load your trained model
+log_reg = joblib.load('stress_detection.sav')  # Replace 'stress_detection.sav' with the actual path to your saved model file
 
-# Set the page title and icon
-st.set_page_config(
-    page_title="Stress Level Predictor",
-    page_icon=":chart_with_upwards_trend:"
-)
-
-# Create a Streamlit app with a centered layout
+# Create a Streamlit app
 st.title("Stress Level Predictor")
-st.markdown("---")
 
 # Add input fields for the new data
 st.header("Enter New Data:")
-
 new_data = {}
-
-snoring_rate = st.text_input("Snoring Rate", value="0.000")
-snoring_rate = float(snoring_rate)  # Convert to float
-
-# (Repeat the above input fields for other features)
+new_data["Feature 1"] = st.number_input("Feature 1", min_value=0, value=50)
+new_data["Feature 2"] = st.number_input("Feature 2", min_value=0, value=18)
+new_data["Feature 3"] = st.number_input("Feature 3", min_value=0, value=99)
+new_data["Feature 4"] = st.number_input("Feature 4", min_value=0, value=8)
+new_data["Feature 5"] = st.number_input("Feature 5", min_value=0, value=97)
+new_data["Feature 6"] = st.number_input("Feature 6", min_value=0, value=80)
+new_data["Feature 7"] = st.number_input("Feature 7", min_value=0, value=9)
+new_data["Feature 8"] = st.number_input("Feature 8", min_value=0, value=55)
 
 # Predict the stress level when a button is clicked
 if st.button("Predict Stress Level"):
     new_data_df = pd.DataFrame([new_data])
     
-    # Make the prediction using your model
-    predicted_stress_level = model.predict(new_data_df)
+    # Make the prediction using the loaded model
+    predicted_stress_level = log_reg.predict(new_data_df)
     
     # Get the human-readable label
     predicted_stress_label = stress_level_labels[predicted_stress_level[0]]
     
     # Display the result
-    st.markdown("---")
-    st.subheader("Prediction Result")
-    st.write(f"Predicted Stress Level: {predicted_stress_label}")
-
-# Add some additional styling using CSS
-st.markdown(
-    """
-    <style>
-    /* Center the Streamlit app */
-    .stApp {
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
-    /* Style the input fields */
-    .stTextInput {
-        width: 100%;
-    }
-
-    /* Style the button */
-    .stButton button {
-        background-color: #008C76;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    /* Style the button on hover */
-    .stButton button:hover {
-        background-color: #006851;
-    }
-
-    /* Style the header */
-    .st-eb {
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    /* Style the subheader */
-    .st-e9 {
-        font-size: 16px;
-        font-weight: bold;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+    st.write(f"Predicted Stress Label: {predicted_stress_level[0]} ({predicted_stress_label})")
