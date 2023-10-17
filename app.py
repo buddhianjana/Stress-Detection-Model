@@ -20,14 +20,31 @@ st.title("Stress Level Predictor")
 # Add input fields for the new data
 st.header("Enter New Data:")
 new_data = {}
-new_data["Feature 1"] = st.number_input("Feature 1", min_value=0, value=50)
-new_data["Feature 2"] = st.number_input("Feature 2", min_value=0, value=18)
-new_data["Feature 3"] = st.number_input("Feature 3", min_value=0, value=99)
-new_data["Feature 4"] = st.number_input("Feature 4", min_value=0, value=8)
-new_data["Feature 5"] = st.number_input("Feature 5", min_value=0, value=97)
-new_data["Feature 6"] = st.number_input("Feature 6", min_value=0, value=80)
-new_data["Feature 7"] = st.number_input("Feature 7", min_value=0, value=9)
-new_data["Feature 8"] = st.number_input("Feature 8", min_value=0, value=55)
+
+snoring_rate = st.text_input("snoring_rate", value="0.000")
+snoring_rate = float(snoring_rate)  # Convert to float
+
+respiration_rate = st.text_input("respiration_rate", value="0.000")
+respiration_rate = float(respiration_rate)  # Convert to float
+
+body_temperature = st.text_input("body_temperature", value="0.000")
+body_temperature = float(body_temperature)  # Convert to float
+
+limb_movemen = st.text_input("limb_movemen", value="0.000")
+limb_movemen = float(limb_movemen)  # Convert to float
+
+blood_oxygen  = st.text_input("blood_oxygen ", value="0.000")
+blood_oxygen  = float(blood_oxygen )  # Convert to float
+
+eye_movement = st.text_input("eye_movement", value="0.000")
+eye_movement = float(eye_movement)  # Convert to float
+
+sleeping_hours = st.text_input("sleeping_hours", value="0.000")
+sleeping_hours = float(sleeping_hours)  # Convert to float
+
+heart_rate  = st.text_input("heart_rate ", value="0.000")
+heart_rate  = float(heart_rate )  # Convert to float
+
 
 # Predict the stress level when a button is clicked
 if st.button("Predict Stress Level"):
