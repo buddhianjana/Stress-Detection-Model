@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import joblib
 
 # Define the stress level labels
 stress_level_labels = {
@@ -11,52 +12,86 @@ stress_level_labels = {
 }
 
 # Load your trained model and necessary data
-# You'll need to replace these placeholders with your actual model and data
-# Example: log_reg = load_model()
+model = joblib.load('your_model_filename.pkl')  # Load your trained model
 # Example: X = load_data()
 
-# Create a Streamlit app
+# Set the page title and icon
+st.set_page_config(
+    page_title="Stress Level Predictor",
+    page_icon=":chart_with_upwards_trend:"
+)
+
+# Create a Streamlit app with a centered layout
 st.title("Stress Level Predictor")
+st.markdown("---")
 
 # Add input fields for the new data
 st.header("Enter New Data:")
+
 new_data = {}
 
-snoring_rate = st.text_input("snoring_rate", value="0.000")
+snoring_rate = st.text_input("Snoring Rate", value="0.000")
 snoring_rate = float(snoring_rate)  # Convert to float
 
-respiration_rate = st.text_input("respiration_rate", value="0.000")
-respiration_rate = float(respiration_rate)  # Convert to float
-
-body_temperature = st.text_input("body_temperature", value="0.000")
-body_temperature = float(body_temperature)  # Convert to float
-
-limb_movemen = st.text_input("limb_movemen", value="0.000")
-limb_movemen = float(limb_movemen)  # Convert to float
-
-blood_oxygen  = st.text_input("blood_oxygen ", value="0.000")
-blood_oxygen  = float(blood_oxygen )  # Convert to float
-
-eye_movement = st.text_input("eye_movement", value="0.000")
-eye_movement = float(eye_movement)  # Convert to float
-
-sleeping_hours = st.text_input("sleeping_hours", value="0.000")
-sleeping_hours = float(sleeping_hours)  # Convert to float
-
-heart_rate  = st.text_input("heart_rate ", value="0.000")
-heart_rate  = float(heart_rate )  # Convert to float
-
-
+# (Repeat the above input fields for other features)
 
 # Predict the stress level when a button is clicked
 if st.button("Predict Stress Level"):
     new_data_df = pd.DataFrame([new_data])
     
-    # Make the prediction (replace this with your model prediction)
-    predicted_stress_level = 2  # Replace with actual prediction code
+    # Make the prediction using your model
+    predicted_stress_level = model.predict(new_data_df)
     
     # Get the human-readable label
-    predicted_stress_label = stress_level_labels[predicted_stress_level]
+    predicted_stress_label = stress_level_labels[predicted_stress_level[0]]
     
     # Display the result
-    st.write(f"Predicted Stress Level:  ({predicted_stress_label})")
+    st.markdown("---")
+    st.subheader("Prediction Result")
+    st.write(f"Predicted Stress Level: {predicted_stress_label}")
+
+# Add some additional styling using CSS
+st.markdown(
+    """
+    <style>
+    /* Center the Streamlit app */
+    .stApp {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* Style the input fields */
+    .stTextInput {
+        width: 100%;
+    }
+
+    /* Style the button */
+    .stButton button {
+        background-color: #008C76;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    /* Style the button on hover */
+    .stButton button:hover {
+        background-color: #006851;
+    }
+
+    /* Style the header */
+    .st-eb {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* Style the subheader */
+    .st-e9 {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
